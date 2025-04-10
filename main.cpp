@@ -136,6 +136,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
+
 		VectorScreenPrintf(0, 0, resultAdd, " : Add");
 		VectorScreenPrintf(0, kRowHeight, resultSubtract, " : Subtract");
 		VectorScreenPrintf(0, kRowHeight * 2, resultMultiply, " : Multiply");
