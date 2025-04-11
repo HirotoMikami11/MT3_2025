@@ -58,12 +58,12 @@ Vector3 Vector3Normalize(const Vector3& v);
 struct Matrix4x4 final {
 	float m[4][4];
 };
+
 //4x4の行列の数値を表示する
 void MatrixScreenPrintf(int x, int y, const Matrix4x4& matrix, const char* label);
 Matrix4x4 Matrix4x4Add(const Matrix4x4& m1, const Matrix4x4& m2);
 Matrix4x4 Matrix4x4Subtract(const Matrix4x4& m1, const Matrix4x4& m2);
 Matrix4x4 Matrix4x4Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
-
 Matrix4x4 Matrix4x4Inverse(const Matrix4x4& m);
 Matrix4x4 Matrix4x4Transpose(const Matrix4x4& m);
 Matrix4x4 MakeIdentity4x4();
