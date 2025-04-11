@@ -1,6 +1,7 @@
 ﻿#pragma once
 #define _USE_MATH_DEFINES
 #include<math.h>
+#include <cmath>
 #include<Novice.h>
 
 
@@ -70,3 +71,13 @@ Matrix4x4 MakeIdentity4x4();
 Matrix4x4 MakeTranslateMatrix(const Vector3& translate);
 Matrix4x4 MakeScaleMatrix(const Vector3& Scale);
 Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
+
+
+//1.X軸回転行列
+Matrix4x4 MakeRotateXMatrix(float radian);
+//2.Y軸回転行列
+Matrix4x4 MakeRotateYMatrix(float radian);
+
+//3.Z軸回転行列
+Matrix4x4 MakeRotateZMatrix(float radian);
+
