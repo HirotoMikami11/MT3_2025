@@ -501,3 +501,86 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 	return worldMatrix;
 
 }
+
+
+Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
+	Matrix4x4 perspectiveFovMatrix = { 0 };
+
+	perspectiveFovMatrix.m[0][0] = (1 / aspectRatio) * (1 / std::tan(fovY / 2));
+	perspectiveFovMatrix.m[0][1] = 0;
+	perspectiveFovMatrix.m[0][2] = 0;
+	perspectiveFovMatrix.m[0][3] = 0;
+
+	perspectiveFovMatrix.m[1][0] = 0;
+	perspectiveFovMatrix.m[1][1] = (1 / (std::tan(fovY / 2)));
+	perspectiveFovMatrix.m[1][2] = 0;
+	perspectiveFovMatrix.m[1][3] = 0;
+
+	perspectiveFovMatrix.m[2][0] = 0;
+	perspectiveFovMatrix.m[2][1] = 0;
+	perspectiveFovMatrix.m[2][2] = (farClip / (farClip - nearClip));
+	perspectiveFovMatrix.m[2][3] = 1;
+
+	perspectiveFovMatrix.m[3][0] = 0;
+	perspectiveFovMatrix.m[3][1] = 0;
+	perspectiveFovMatrix.m[3][2] = (-nearClip * farClip) / (farClip - nearClip);
+	perspectiveFovMatrix.m[3][3] = 0;
+
+	return perspectiveFovMatrix;
+}
+
+
+
+Matrix4x4 MakeOrthpgrapicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip) {
+	Matrix4x4 orthpgrapicMatrix = { 0 };
+
+	orthpgrapicMatrix.m[0][0] = 2 / (right - left);
+	orthpgrapicMatrix.m[0][1] = 0;
+	orthpgrapicMatrix.m[0][2] = 0;
+	orthpgrapicMatrix.m[0][3] = 0;
+
+	orthpgrapicMatrix.m[1][0] = 0;
+	orthpgrapicMatrix.m[1][1] = 2 / (top - bottom);
+	orthpgrapicMatrix.m[1][2] = 0;
+	orthpgrapicMatrix.m[1][3] = 0;
+
+	orthpgrapicMatrix.m[2][0] = 0;
+	orthpgrapicMatrix.m[2][1] = 0;
+	orthpgrapicMatrix.m[2][2] = 1 / (farClip - nearClip);
+	orthpgrapicMatrix.m[2][3] = 0;
+
+	orthpgrapicMatrix.m[3][0] = (left + right) / (left - right);
+	orthpgrapicMatrix.m[3][1] = (top + bottom) / (bottom - top);
+	orthpgrapicMatrix.m[3][2] = nearClip / (nearClip - farClip);
+	orthpgrapicMatrix.m[3][3] = 0;
+
+	return orthpgrapicMatrix;
+
+}
+
+
+Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth) {
+	Matrix4x4 viewportMatrix = { 0 };
+
+	viewportMatrix.m[0][0] = width / 2;
+	viewportMatrix.m[0][1] = 0;
+	viewportMatrix.m[0][2] = 0;
+	viewportMatrix.m[0][3] = 0;
+
+	viewportMatrix.m[1][0] = 0;
+	viewportMatrix.m[1][1] = -(height / 2);
+	viewportMatrix.m[1][2] = 0;
+	viewportMatrix.m[1][3] = 0;
+
+	viewportMatrix.m[2][0] = 0;
+	viewportMatrix.m[2][1] = 0;
+	viewportMatrix.m[2][2] = maxDepth - minDepth;
+	viewportMatrix.m[2][3] = 0;
+
+	viewportMatrix.m[3][0] = left + (width / 2);
+	viewportMatrix.m[3][1] = top + (height / 2);
+	viewportMatrix.m[3][2] = minDepth;
+	viewportMatrix.m[3][3] = 1;
+
+	return viewportMatrix;
+}
