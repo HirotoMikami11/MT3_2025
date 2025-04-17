@@ -32,7 +32,7 @@ Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip
 
 
 //2.正射影行列
-Matrix4x4 MakeOrthpgrapicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip) {
+Matrix4x4 MakeOrthograpicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip) {
 	Matrix4x4 orthpgrapicMatrix = { 0 };
 
 	orthpgrapicMatrix.m[0][0] = 2 / (right - left);
@@ -53,7 +53,7 @@ Matrix4x4 MakeOrthpgrapicMatrix(float left, float top, float right, float bottom
 	orthpgrapicMatrix.m[3][0] = (left + right) / (left - right);
 	orthpgrapicMatrix.m[3][1] = (top + bottom) / (bottom - top);
 	orthpgrapicMatrix.m[3][2] = nearClip / (nearClip - farClip);
-	orthpgrapicMatrix.m[3][3] = 0;
+	orthpgrapicMatrix.m[3][3] = 1;
 
 	return orthpgrapicMatrix;
 
@@ -96,7 +96,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int kRowHeight = 20;
 	Matrix4x4 orthographicMatrix =
-		MakeOrthpgrapicMatrix(-160.0f, 160.0f, 200.0f, 300.0f, 0.0f, 1000.0f);
+		MakeOrthograpicMatrix(-160.0f, 160.0f, 200.0f, 300.0f, 0.0f, 1000.0f);
 
 	Matrix4x4 perspectiveFovMatrix =
 		MakePerspectiveFovMatrix(0.63f, 1.33f, 0.1f, 1000.0f);
