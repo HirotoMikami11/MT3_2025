@@ -531,7 +531,7 @@ Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip
 
 
 
-Matrix4x4 MakeOrthpgrapicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip) {
+Matrix4x4 MakeOrthograpicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip) {
 	Matrix4x4 orthpgrapicMatrix = { 0 };
 
 	orthpgrapicMatrix.m[0][0] = 2 / (right - left);
@@ -552,7 +552,7 @@ Matrix4x4 MakeOrthpgrapicMatrix(float left, float top, float right, float bottom
 	orthpgrapicMatrix.m[3][0] = (left + right) / (left - right);
 	orthpgrapicMatrix.m[3][1] = (top + bottom) / (bottom - top);
 	orthpgrapicMatrix.m[3][2] = nearClip / (nearClip - farClip);
-	orthpgrapicMatrix.m[3][3] = 0;
+	orthpgrapicMatrix.m[3][3] = 1;
 
 	return orthpgrapicMatrix;
 
