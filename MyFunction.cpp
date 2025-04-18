@@ -1,7 +1,41 @@
 ﻿#include "MyFunction.h"
 
+/*-----------------------------------------------------------------------*/
+//
+//								描画関数
+//
+/*-----------------------------------------------------------------------*/
+
+
+//	正射影ベクトルを求める関数
+Vector3 Project(const Vector3& v1, const Vector3& v2) {
+	Vector3 project = Vector3Multiply(Vector3Normalize(v2), Vector3Dot(v1, Vector3Normalize(v2)));
+	return project;
+}
+//　最近接点を求める関数
+Vector3 ClosestPoint(const Vector3& point, const Segment& segment) {
+	Vector3 project = Project(Vector3Subtract(point, segment.origin), segment.diff);
+	Vector3 closestPoint = Vector3Add(segment.origin, project);
+
+	return closestPoint;
+}
+
+
+
+
+/*-----------------------------------------------------------------------*/
+//
+//								描画関数
+//
+/*-----------------------------------------------------------------------*/
 
 //グリッド線を描画する関数
+
+/// <summary>
+/// グリッド線を描画する関数
+/// </summary>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
 void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix) {
 	const float kGridHalfWidth = 2.0f;									//Gridの半分の幅
 	const uint32_t kSubdivision = 10;									//分割数
@@ -68,7 +102,14 @@ void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMa
 
 
 
-//球体を表示する関数
+
+/// <summary>
+/// 球体を描画する関数
+/// </summary>
+/// <param name="sphere">球体</param>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
+/// <param name="color">色</param>
 void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
 	const uint32_t kSubdivision = 10;//分割数
 	const float kLonEvery = (2 * float(M_PI)) / kSubdivision;		//経度分割1つ分の角度
@@ -129,5 +170,32 @@ void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, con
 		}
 
 	}
+
+}
+
+
+/// <summary>
+/// 線分を描画する関数
+/// </summary>
+/// <param name="segment">線分</param>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
+/// <param name="color">色</param>
+void DrawLine(const Segment& segment, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color)
+{
+	///線分の両端を求める
+	Vector3 start = segment.origin;
+	Vector3 end = Vector3Add(segment.origin, segment.diff);
+	///スクリーン座標に変換
+	Vector3 screenStart = Transform(Transform(start, viewProjectionMatrix), viewportMatrix);
+	Vector3 screenEnd = Transform(Transform(end, viewProjectionMatrix), viewportMatrix);
+	///描画
+	Novice::DrawLine(
+		static_cast<int>(screenStart.x),
+		static_cast<int>(screenStart.y),
+		static_cast<int>(screenEnd.x),
+		static_cast<int>(screenEnd.y),
+		color);
+
 
 }

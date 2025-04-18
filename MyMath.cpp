@@ -598,3 +598,13 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
 
 	return viewportMatrix;
 }
+
+
+Matrix4x4 MakeViewProjectionMatrix(const Matrix4x4 cameraMatrix, float aspectRatio) {
+	Matrix4x4 viewMatrix = Matrix4x4Inverse(cameraMatrix);
+	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f,
+		aspectRatio, 0.1f, 100.0f);
+	Matrix4x4 viewProjectionMatrix = Matrix4x4Multiply(viewMatrix, projectionMatrix);
+
+	return viewProjectionMatrix;
+}
