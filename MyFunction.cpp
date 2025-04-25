@@ -21,6 +21,20 @@ Vector3 ClosestPoint(const Vector3& point, const Segment& segment) {
 }
 
 
+//　球と球の衝突判定
+bool IsCollision(const Sphere& sphere1, const Sphere& sphere2) {
+
+	//2つの球の中心転換の距離を求める
+	float distance = Vector3Length(Vector3Subtract(sphere1.center, sphere2.center));
+
+	//半径の合計より短ければ衝突
+	if (distance <= sphere1.radius + sphere2.radius) {
+		return true;
+	}
+
+	return false;
+}
+
 
 
 /*-----------------------------------------------------------------------*/

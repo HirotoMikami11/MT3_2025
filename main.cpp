@@ -3,23 +3,7 @@
 #include <imgui.h>
 #include "Camera.h"
 
-const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_02_01";
-
-//　球と球の衝突判定
-bool IsCollision(const Sphere& sphere1, const Sphere& sphere2) {
-
-	//2つの球の中心転換の距離を求める
-	float distance = Vector3Length(Vector3Subtract(sphere1.center, sphere2.center));
-
-	//半径の合計より短ければ衝突
-	if (distance <= sphere1.radius + sphere2.radius) {
-		return true;
-	}
-
-	return false;
-}
-
-
+const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_02_02";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -33,10 +17,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Camera* camera = new Camera();
 	camera->Initialize();
-
-	Sphere sphere[2];
-	sphere[0] = { {0.0f, 0.0f, 0.0f},0.6f };
-	sphere[1] = { {0.8f, 0.0f, 1.0f},0.4f };
 
 
 	// ウィンドウの×ボタンが押されるまでループ
@@ -68,23 +48,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		ImGui::Begin("Window");
-		for (int i = 0; i < 2; i++){
-			std::string labelCenter = std::format("sphere[{}].center", i);
-			std::string labelRadius = std::format("sphere[{}].radius", i);
-			ImGui::DragFloat3(labelCenter.c_str(), &sphere[i].center.x, 0.01f);
-			ImGui::DragFloat(labelRadius.c_str(), &sphere[i].radius, 0.01f);
-		}
+
 		ImGui::End();
 
 		//グリッド線を描画
 		DrawGrid(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-
-		for (int i = 0; i < 2; i++)
-		{
-			//球体を描画
-			DrawSphere(sphere[i], camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), IsCollision(sphere[0], sphere[1]) ? RED : WHITE);
-
-		}
 
 		///
 		/// ↑描画処理ここまで
