@@ -1,8 +1,24 @@
 #include <Novice.h>
 #include "MyFunction.h"
 #include <imgui.h>
+#include "Camera.h"
 
-const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_02_00";
+const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_02_01";
+
+//　球と球の衝突判定
+bool IsCollision(const Sphere& sphere1, const Sphere& sphere2) {
+
+	//2つの球の中心転換の距離を求める
+	float distance = Vector3Length(Vector3Subtract(sphere1.center, sphere2.center));
+
+	//半径の合計より短ければ衝突
+	if (distance <= sphere1.radius + sphere2.radius) {
+		return true;
+	}
+
+	return false;
+}
+
 
 
 // Windowsアプリでのエントリーポイント(main関数)
@@ -15,11 +31,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
 
-	int kWindowWidth = 1280;
-	int kWindowHeight = 720;
+	Camera* camera = new Camera();
+	camera->Initialize();
 
-	Vector3 cameraTranslate{ 0.0f,1.9f,-6.49f };
-	Vector3 cameraRotate{ 0.26f,0.0f,0.0f };
+	Sphere sphere[2];
+	sphere[0] = { {0.0f, 0.0f, 0.0f},0.6f };
+	sphere[1] = { {0.8f, 0.0f, 1.0f},0.4f };
+
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -30,13 +48,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		memcpy(preKeys, keys, 256);
 		Novice::GetHitKeyStateAll(keys);
 
+
+
 		///
 		/// ↓更新処理ここから
 		///
 
-		Matrix4x4 cameraMatrix = MakeAffineMatrix({ 1.0f,1.0f,1.0f }, cameraRotate, cameraTranslate);
-		Matrix4x4 viewportMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
-		Matrix4x4 viewProjectionMatrix = MakeViewProjectionMatrix(cameraMatrix, float(kWindowWidth) / float(kWindowHeight));
+		//カメラの更新
+		camera->Update(keys,preKeys);
 
 
 
@@ -47,23 +66,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
-		
+
 		ImGui::Begin("Window");
-		//カメラ
-		ImGui::DragFloat3("CameraTranslate", &cameraTranslate.x, 0.01f);
-		ImGui::DragFloat3("CameraRotate", &cameraRotate.x, 0.01f);
-		
-		//カメラを初期状態に戻す
-		if (ImGui::Button("Reset Camera")) {
-			cameraTranslate={ 0.0f,1.9f,-6.49f };
-			cameraRotate={ 0.26f,0.0f,0.0f };
+		for (int i = 0; i < 2; i++){
+			std::string labelCenter = std::format("sphere[{}].center", i);
+			std::string labelRadius = std::format("sphere[{}].radius", i);
+			ImGui::DragFloat3(labelCenter.c_str(), &sphere[i].center.x, 0.01f);
+			ImGui::DragFloat(labelRadius.c_str(), &sphere[i].radius, 0.01f);
 		}
 		ImGui::End();
 
 		//グリッド線を描画
-		DrawGrid(viewProjectionMatrix, viewportMatrix);
+		DrawGrid(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 
+		for (int i = 0; i < 2; i++)
+		{
+			//球体を描画
+			DrawSphere(sphere[i], camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), IsCollision(sphere[0], sphere[1]) ? RED : WHITE);
 
+		}
 
 		///
 		/// ↑描画処理ここまで
@@ -77,6 +98,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		}
 	}
+
+
+	delete	camera;
 
 	// ライブラリの終了
 	Novice::Finalize();

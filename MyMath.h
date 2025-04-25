@@ -3,7 +3,7 @@
 #include<math.h>
 #include <cmath>
 #include<Novice.h>
-
+#include <format>//imGuiで配列をfor分で回すとき使う
 
 /*-----------------------------------------------------------------------*/
 //
