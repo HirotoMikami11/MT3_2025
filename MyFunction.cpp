@@ -35,6 +35,28 @@ bool IsCollision(const Sphere& sphere1, const Sphere& sphere2) {
 	return false;
 }
 
+//球と平面の衝突判定
+bool IsCollision(const Sphere& sphere, const Plane& plane) {
+	//1.平面と球の中心点との距離を求める
+	float direction = Vector3Length(Vector3Subtract(plane.normal, sphere.center));
+
+	//2.1の距離<=球の半径なら衝突
+	if (direction <= sphere.radius) {
+		return true;
+	}
+
+	return false;
+
+}
+
+
+// 垂直なベクトルを求める
+Vector3 Perpendicular(const Vector3& vector) {
+	if (vector.x != 0.0f || vector.y != 0.0f) {
+		return { -vector.y, vector.x, 0.0f };
+	}
+	return { 0.0f, -vector.z, vector.y };
+}
 
 
 /*-----------------------------------------------------------------------*/
@@ -211,5 +233,45 @@ void DrawLine(const Segment& segment, const Matrix4x4& viewProjectionMatrix, con
 		static_cast<int>(screenEnd.y),
 		color);
 
+
+}
+
+
+
+//平面の描画
+void DrawPlane(const Plane& plane, const Matrix4x4 viewProjectionMatrix, const Matrix4x4 viewportMatrix, uint32_t color) {
+	//1.平面の中心点を決める
+	Vector3 center = Vector3Multiply(plane.normal, plane.distance);
+
+	Vector3 perpendiculars[4];
+	//2.法線と垂直なベクトルを求める
+	perpendiculars[0] = Vector3Normalize(Perpendicular(plane.normal));
+
+	//3.2の逆ベクトルを求める
+	perpendiculars[1] = { -perpendiculars[0].x,-perpendiculars[0].y,-perpendiculars[0].z };
+
+	//4.2の法線とのクロス積を求める
+	perpendiculars[2] = Cross(plane.normal, perpendiculars[0]);
+
+	//5.4の逆ベクトルを求める
+	perpendiculars[3] = { -perpendiculars[2].x,-perpendiculars[2].y,-perpendiculars[2].z };
+
+	//6.2~5のベクトルを中心点に、定数倍して足して4頂点を出す
+	Vector3 points[4];
+
+	for (int32_t index = 0; index < 4; ++index) {
+		Vector3 extend = Vector3Multiply(perpendiculars[index], 2.0f);
+		Vector3 point = Vector3Add(center, extend);
+		points[index] = Transform(Transform(point, viewProjectionMatrix), viewportMatrix);
+	}
+	//描画
+	Novice::DrawLine(static_cast<int>(points[0].x), static_cast<int>(points[0].y),
+		static_cast<int>(points[3].x), static_cast<int>(points[3].y), color);
+	Novice::DrawLine(static_cast<int>(points[0].x), static_cast<int>(points[0].y),
+		static_cast<int>(points[2].x), static_cast<int>(points[2].y), color);
+	Novice::DrawLine(static_cast<int>(points[1].x), static_cast<int>(points[1].y),
+		static_cast<int>(points[2].x), static_cast<int>(points[2].y), color);
+	Novice::DrawLine(static_cast<int>(points[1].x), static_cast<int>(points[1].y),
+		static_cast<int>(points[3].x), static_cast<int>(points[3].y), color);
 
 }
