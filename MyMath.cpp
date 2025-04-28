@@ -57,6 +57,16 @@ Vector3 Vector3Multiply(const Vector3& v,float scalar ) {
 	return result;
 }
 
+
+Vector3 Vector3Multiply( float scalar,const Vector3& v) {
+	Vector3 result = {
+	v.x * scalar,
+	v.y * scalar,
+	v.z * scalar
+	};
+	return result;
+}
+
 float Vector3Dot(const Vector3& v1, const Vector3& v2) {
 	float result =
 		v1.x * v2.x +

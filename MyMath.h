@@ -41,6 +41,7 @@ Vector3 Vector3Add(const Vector3& v1, const Vector3& v2);
 Vector3 Vector3Subtract(const Vector3& v1, const Vector3& v2);
 //スカラー倍
 Vector3 Vector3Multiply(const Vector3& v, float scalar);
+Vector3 Vector3Multiply(float scalar, const Vector3& v);
 //内積
 float Vector3Dot(const Vector3& v1, const Vector3& v2);
 //長さ
@@ -62,6 +63,7 @@ Vector3 Cross(const Vector3& v1, const Vector3& v2);
 struct Matrix4x4 final {
 	float m[4][4];
 };
+
 
 //4x4の行列の数値を表示する
 void MatrixScreenPrintf(int x, int y, const Matrix4x4& matrix, const char* label);
