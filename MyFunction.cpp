@@ -49,6 +49,30 @@ bool IsCollision(const Sphere& sphere, const Plane& plane) {
 
 }
 
+//線分と平面の衝突判定
+bool IsCollision(const Segment& segment, const Plane& plane) {
+	//衝突しているかどうか
+	bool isCollision = false;
+
+	//垂直判定を行うため、法線と線の内積を求める
+	float dot = Vector3Dot(plane.normal, segment.diff);
+	//垂直=平行であるので、衝突していない
+	if (dot == 0.0f) {
+		return false;
+	}
+
+	//tを求める
+	float t = (plane.distance - Vector3Dot(segment.origin, plane.normal)) / dot;
+
+	//tの値と線の種類によって衝突しているかを判定する
+	//線分なので0~1
+	if (t >= 0 && t <= 1) {
+		isCollision = true;
+	}
+
+	return isCollision;
+}
+
 
 // 垂直なベクトルを求める
 Vector3 Perpendicular(const Vector3& vector) {

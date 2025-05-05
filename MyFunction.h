@@ -75,10 +75,19 @@ bool IsCollision(const Sphere& sphere1, const Sphere& sphere2);
 /// <summary>
 /// 球と平面の衝突判定
 /// </summary>
-/// <param name="sphere"> </param>
-/// <param name="plane"> </param>
+/// <param name="sphere"> 球体/param>
+/// <param name="plane"> 平面</param>
 /// <returns></returns>
 bool IsCollision(const Sphere& sphere, const Plane& plane);
+
+
+/// <summary>
+/// 線分と平面の衝突判定
+/// </summary>
+/// <param name="segment">線分</param>
+/// <param name="plane">平面</param>
+/// <returns></returns>
+bool IsCollision(const Segment& segment, const Plane& plane);
 
 /// <summary>
 /// 垂直なベクトルを求める
