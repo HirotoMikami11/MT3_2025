@@ -49,6 +49,14 @@ struct Triangle {
 	Vector3 vertices[3];//頂点
 };
 
+/// <summary>
+/// AABB(軸並行境界箱)
+/// </summary>
+struct AABB {
+	Vector3 min;	//最小点
+	Vector3 max;	//最大点
+
+};
 
 /*-----------------------------------------------------------------------*/
 //
@@ -116,6 +124,23 @@ Vector3 MakeCollisionPoint(const Segment& segment, const Plane& plane);
 bool IsCollision(const Triangle& triangle, const Segment& segment);
 
 /// <summary>
+/// AABBとAABBの衝突判定
+/// </summary>
+/// <param name="aabb1"></param>
+/// <param name="aabb2"></param>
+/// <returns></returns>
+bool IsCollision(const AABB& aabb1, const AABB& aabb2);
+
+
+/// <summary>
+/// 最大最小を正しくする関数
+/// </summary>
+/// <param name="aabb"></param>
+void FixAABBMinMax(AABB& aabb);
+
+
+
+/// <summary>
 /// 垂直なベクトルを求める
 /// </summary>
 /// <param name="vector"></param>
@@ -177,6 +202,15 @@ void DrawPlane(const Plane& plane, const Matrix4x4 viewProjectionMatrix, const M
 /// <param name="color"></param>
 void DrawTriangle(const Triangle& triangle, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 
+
+/// <summary>
+/// AABBの描画
+/// </summary>
+/// <param name="aabb"></param>
+/// <param name="viewPeojectionMatrix"></param>
+/// <param name="viewportMatrix"></param>
+/// <param name="color"></param>
+void DrawAABB(const AABB& aabb, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 
 
 
