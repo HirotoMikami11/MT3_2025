@@ -42,6 +42,12 @@ struct Plane {
 };
 
 
+/// <summary>
+/// 三角形
+/// </summary>
+struct Triangle {
+	Vector3 vertices[3];//頂点
+};
 
 
 /*-----------------------------------------------------------------------*/
@@ -90,6 +96,24 @@ bool IsCollision(const Sphere& sphere, const Plane& plane);
 /// <param name="plane">平面</param>
 /// <returns></returns>
 bool IsCollision(const Segment& segment, const Plane& plane);
+
+
+
+/// <summary>
+/// 線分と平面の衝突点の座標を求める
+/// </summary>
+/// <param name="segment"></param>
+/// <param name="normal"></param>
+/// <param name="distance"></param>
+/// <returns></returns>
+Vector3 MakeCollisionPoint(const Segment& segment, const Plane& plane);
+/// <summary>
+/// 三角形と線分の衝突判定
+/// </summary>
+/// <param name="triangle"></param>
+/// <param name="segnent"></param>
+/// <returns></returns>
+bool IsCollision(const Triangle& triangle, const Segment& segment);
 
 /// <summary>
 /// 垂直なベクトルを求める
@@ -142,6 +166,16 @@ void DrawPlane(const Plane& plane, const Matrix4x4 viewProjectionMatrix, const M
 
 
 
+
+
+/// <summary>
+/// 三角形を描画
+/// </summary>
+/// <param name="triangle"></param>
+/// <param name="viewProjectionMatrix"></param>
+/// <param name="viewportMatrix"></param>
+/// <param name="color"></param>
+void DrawTriangle(const Triangle& triangle, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 
 
 
