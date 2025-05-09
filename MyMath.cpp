@@ -98,6 +98,21 @@ Vector3 Vector3Normalize(const Vector3& v) {
 	return result;
 }
 
+//距離を求める
+float Vector3Distance(const Vector3 v1, const Vector3 v2) {
+
+	float result = powf({ v2.x - v1.x }, 2) + powf({ v2.y - v1.y }, 2) + powf({ v2.z - v1.z }, 2);
+	return result;
+}
+float Abs(const float f) {
+	float result = f;
+
+	if (result >= 0) {
+		return result;
+	} else {
+		return -result;
+	}
+}
 
 //クロス積
 Vector3 Cross(const Vector3& v1, const Vector3& v2) {

@@ -49,6 +49,8 @@ float Vector3Length(const Vector3& v);
 //正規化
 Vector3 Vector3Normalize(const Vector3& v);
 
+//距離を求める
+float Vector3Distance(const Vector3 v1, const Vector3 v2);
 //クロス積
 Vector3 Cross(const Vector3& v1, const Vector3& v2);
 
