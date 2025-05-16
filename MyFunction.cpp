@@ -23,30 +23,32 @@ Vector3 ClosestPoint(const Vector3& point, const Segment& segment) {
 
 //　球と球の衝突判定
 bool IsCollision(const Sphere& sphere1, const Sphere& sphere2) {
+	bool isCollision = false;
 
 	//2つの球の中心転換の距離を求める
 	float distance = Vector3Length(Vector3Subtract(sphere1.center, sphere2.center));
 
 	//半径の合計より短ければ衝突
 	if (distance <= sphere1.radius + sphere2.radius) {
-		return true;
+		isCollision = true;
 	}
 
-	return false;
+	return isCollision;
 }
 
 //球と平面の衝突判定
 bool IsCollision(const Sphere& sphere, const Plane& plane) {
+	bool isCollision = false;
+
 	//1.平面と球の中心点との距離を求める
 	float direction = Vector3Length(Vector3Subtract(plane.normal, sphere.center));
 
 	//2.1の距離<=球の半径なら衝突
 	if (direction <= sphere.radius) {
-		return true;
+		isCollision = true;
 	}
 
-	return false;
-
+	return isCollision;
 }
 
 //線分と平面の衝突判定
@@ -283,7 +285,7 @@ void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMa
 /// <param name="viewportMatrix">ビューポート</param>
 /// <param name="color">色</param>
 void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
-	const uint32_t kSubdivision = 10;//分割数
+	const uint32_t kSubdivision = 16;//分割数
 	const float kLonEvery = (2 * float(M_PI)) / kSubdivision;		//経度分割1つ分の角度
 	const float kLatEvery = float(M_PI) / kSubdivision;				//緯度分割1つ分の角度
 
