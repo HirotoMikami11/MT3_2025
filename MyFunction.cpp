@@ -170,6 +170,26 @@ bool IsCollision(const AABB& aabb1, const AABB& aabb2) {
 }
 
 
+bool IsCollision(const AABB& aabb, Sphere& sphere) {
+	bool isCollision = false;
+
+	//球の中心座標がAABBの[min,max]内にclampすれば、それが最近接点になる
+	Vector3 closestPoint{
+		std::clamp(sphere.center.x,aabb.min.x,aabb.max.x),
+		std::clamp(sphere.center.y,aabb.min.y,aabb.max.y),
+		std::clamp(sphere.center.z,aabb.min.z,aabb.max.z),
+	};
+
+	//最近接点と球の中心との距離を求める
+	float distance = Vector3Length(Vector3Subtract(closestPoint, sphere.center));
+	//距離が半径より小さければ衝突
+	if (distance <= sphere.radius) {
+		isCollision = true;
+	}
+	return isCollision;
+
+}
+
 /// <summary>
 /// 最大最小を正しくする関数
 /// </summary>

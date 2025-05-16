@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include "MyMath.h"
+#include<algorithm>
+
 /// <summary>
 /// 球体
 /// </summary>
@@ -131,6 +133,14 @@ bool IsCollision(const Triangle& triangle, const Segment& segment);
 /// <returns></returns>
 bool IsCollision(const AABB& aabb1, const AABB& aabb2);
 
+
+/// <summary>
+/// AABBと球の衝突判定
+/// </summary>
+/// <param name="aabb"></param>
+/// <param name="sphere"></param>
+/// <returns></returns>
+bool IsCollision(const AABB& aabb, Sphere& sphere);
 
 /// <summary>
 /// 最大最小を正しくする関数
