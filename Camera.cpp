@@ -27,7 +27,7 @@ void Camera::Update(char keys[], char preKeys[])
 void Camera::Move(char keys[], char preKeys[])
 {
 	//カメラが移動するか
-	if (keys[DIK_RETURN] && !preKeys[DIK_RETURN]) {
+	if (keys[DIK_TAB] && !preKeys[DIK_TAB]) {
 		if (!IsMoveCamera) {
 			IsMoveCamera = true;
 		} else {
@@ -93,7 +93,13 @@ void Camera::ImGui()
 
 	ImGui::Begin("Camera");
 
+	ImGui::Text("ChangeMovingMode : TAB Key");
 	ImGui::Text("CameraMove: %s", IsMoveCamera ? "TRUE" : "FALSE");
+	
+	//カメラの移動
+	ImGui::Checkbox("Moving Camera", &IsMoveCamera);
+
+
 	ImGui::Text("CameraTranslate: %f,%f,%f", cameraTranslate.x, cameraTranslate.y, cameraTranslate.z);
 	ImGui::Text("CameraRotate: %f,%f,%f", cameraRotate.x, cameraRotate.y, cameraRotate.z);
 

@@ -149,7 +149,13 @@ bool IsCollision(const AABB& aabb, Sphere& sphere);
 void FixAABBMinMax(AABB& aabb);
 
 
-
+/// <summary>
+/// AABBと線分の衝突判定
+/// </summary>
+/// <param name="aabb"></param>
+/// <param name="segment"></param>
+/// <returns></returns>
+bool IsCollision(const AABB& aabb, const Segment& segment);
 /// <summary>
 /// 垂直なベクトルを求める
 /// </summary>

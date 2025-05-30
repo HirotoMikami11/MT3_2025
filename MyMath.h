@@ -5,6 +5,7 @@
 #include<Novice.h>
 #include<assert.h>
 #include <format>//imGuiで配列をfor分で回すとき使う
+#include<algorithm>
 
 /*-----------------------------------------------------------------------*/
 //
