@@ -38,18 +38,20 @@ bool IsCollision(const Sphere& sphere1, const Sphere& sphere2) {
 
 //球と平面の衝突判定
 bool IsCollision(const Sphere& sphere, const Plane& plane) {
-	bool isCollision = false;
 
-	//1.平面と球の中心点との距離を求める
-	float direction = Vector3Length(Vector3Subtract(plane.normal, sphere.center));
+	//1.点と平面との距離
+	//そのままだと符号付き距離になってしまうので、絶対値(abs)を取る
+	float distance = std::abs(Vector3Dot(plane.normal, sphere.center) - plane.distance);
 
 	//2.1の距離<=球の半径なら衝突
-	if (direction <= sphere.radius) {
-		isCollision = true;
+	if (distance <= sphere.radius) {
+		return true;
 	}
 
-	return isCollision;
+	return false;
+
 }
+
 
 //線分と平面の衝突判定
 bool IsCollision(const Segment& segment, const Plane& plane) {
