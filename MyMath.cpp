@@ -1,17 +1,16 @@
 ﻿#include "MyMath.h"
 
 
+float Lerp(const float& min, const float& max, float t) { return min + (max - min) * t; };
+
 /*-----------------------------------------------------------------------*/
 //
 //								2次元ベクトル
 //
 /*-----------------------------------------------------------------------*/
 
-
-
-
-
-
+// 線形補間
+Vector2 Lerp(const Vector2& min, const Vector2& max, float t) { return Vector2(min.x + (max.x - min.x) * t, min.y + (max.y - min.y) * t); }
 
 
 /*-----------------------------------------------------------------------*/
@@ -19,6 +18,7 @@
 //								3次元ベクトル
 //
 /*-----------------------------------------------------------------------*/
+
 
 
 void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label) {
@@ -48,7 +48,7 @@ Vector3 Vector3Subtract(const Vector3& v1, const Vector3& v2) {
 	return result;
 }
 
-Vector3 Vector3Multiply(const Vector3& v,float scalar ) {
+Vector3 Vector3Multiply(const Vector3& v, float scalar) {
 	Vector3 result = {
 	v.x * scalar,
 	v.y * scalar,
@@ -58,7 +58,7 @@ Vector3 Vector3Multiply(const Vector3& v,float scalar ) {
 }
 
 
-Vector3 Vector3Multiply( float scalar,const Vector3& v) {
+Vector3 Vector3Multiply(float scalar, const Vector3& v) {
 	Vector3 result = {
 	v.x * scalar,
 	v.y * scalar,
@@ -122,6 +122,17 @@ Vector3 Cross(const Vector3& v1, const Vector3& v2) {
 	(v1.x * v2.y) - (v1.y * v2.x) };
 	return result;
 }
+
+// 線形補間
+Vector3 Lerp(const Vector3& min, const Vector3& max, float t) {
+	Vector3 result = {
+	min.x + (max.x - min.x) * t,
+	min.y + (max.y - min.y) * t,
+	min.z + (max.z - min.z) * t
+	};
+	return result;
+}
+
 
 
 /*-----------------------------------------------------------------------*/

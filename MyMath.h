@@ -7,6 +7,17 @@
 #include <format>//imGuiで配列をfor分で回すとき使う
 #include<algorithm>
 
+
+
+
+
+
+
+
+
+
+
+float Lerp(const float& min, const float& max, float t);
 /*-----------------------------------------------------------------------*/
 //
 //								2次元ベクトル
@@ -20,7 +31,8 @@ struct Vector2 final {
 	float x;
 	float y;
 };
-
+// 線形補間
+Vector2 Lerp(const Vector2& min, const Vector2& max, float t);
 /*-----------------------------------------------------------------------*/
 //
 //								3次元ベクトル
@@ -55,6 +67,9 @@ Vector3 Vector3Normalize(const Vector3& v);
 float Vector3Distance(const Vector3 v1, const Vector3 v2);
 //クロス積
 Vector3 Cross(const Vector3& v1, const Vector3& v2);
+
+// 線形補間
+Vector3 Lerp(const Vector3& min, const Vector3& max, float t);
 
 /*-----------------------------------------------------------------------*/
 //
