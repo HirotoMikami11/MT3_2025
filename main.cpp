@@ -5,113 +5,7 @@
 #include<string>
 
 
-const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_03_01";
-
-/// <summary>
-/// parts
-/// </summary>
-enum class parts {
-	Shoulder,		//肩
-	Elbow,			//肘
-	Hands			//手
-};
-
-
-/// <summary>
-/// 階層構造の変換行列を計算
-/// </summary>
-void UpdateHierarchy(
-	const Vector3 translates[],
-	const Vector3 rotates[],
-	const Vector3 scales[],
-	Matrix4x4 worldMatrices[],
-	int partCount
-) {
-
-	//partsの数だけ回す
-	for (int i = 0; i < partCount; i++) {
-		
-		// ローカル変換行列を作成
-		Matrix4x4 scaleMatrix = MakeScaleMatrix(scales[i]);
-		Matrix4x4 rotateMatrix = MakeRotateXYZMatrix(rotates[i]);
-		Matrix4x4 translateMatrix = MakeTranslateMatrix(translates[i]);
-
-		// SRT順でローカルのアフィン行列
-		Matrix4x4 localMatrix = Matrix4x4Multiply(scaleMatrix, Matrix4x4Multiply(rotateMatrix, translateMatrix));
-
-		///iでそれが根元(親)かどうか判定する
-		if (i == 0) {
-			// 親がいない場合はローカル変換がそのままワールド変換
-			worldMatrices[i] = localMatrix;
-		} else {
-			// 親がいる場合は親のワールド変換を適用
-			worldMatrices[i] = Matrix4x4Multiply(localMatrix, worldMatrices[i-1]);
-		}
-	}
-}
-
-/// <summary>
-/// 階層構造を描画
-/// </summary>
-/// <param name="worldMatrices">ワールド変換行列配列</param>
-/// <param name="colors">各パーツの色配列</param>
-/// <param name="partCount">パーツ数</param>
-/// <param name="viewProjectionMatrix">ビュープロジェクション行列</param>
-/// <param name="viewportMatrix">ビューポート行列</param>
-/// <param name="sphereRadius">球体の半径</param>
-void DrawHierarchy(
-	const Matrix4x4 worldMatrices[],
-	const uint32_t colors[],
-	int partCount,
-	const Matrix4x4& viewProjectionMatrix,
-	const Matrix4x4& viewportMatrix,
-	float sphereRadius = 0.05f
-) {
-
-	for (int i = 0; i < partCount; i++) {
-		// 各パーツの位置を取得（ワールド変換行列の平行移動成分）
-		Vector3 worldPosition = {
-			worldMatrices[i].m[3][0],
-			worldMatrices[i].m[3][1],
-			worldMatrices[i].m[3][2]
-		};
-
-		// 球体描画
-		DrawSphere(
-			{ worldPosition, sphereRadius },
-			viewProjectionMatrix,
-			viewportMatrix,
-			colors[i]);
-
-		// 親との線を描画（階層構造の可視化）
-		if (i != 0) {
-			//親の座標を求める
-			Vector3 parentPosition = {
-				worldMatrices[i-1].m[3][0],
-				worldMatrices[i-1].m[3][1],
-				worldMatrices[i-1].m[3][2]
-			};
-
-			// スクリーン座標に変換
-			Vector3 ndcPos1 = Transform(worldPosition, viewProjectionMatrix);
-			Vector3 ndcPos2 = Transform(parentPosition, viewProjectionMatrix);
-
-			Vector3 screenPos1 = Transform(ndcPos1, viewportMatrix);
-			Vector3 screenPos2 = Transform(ndcPos2, viewportMatrix);
-
-			// 線を描画
-			Novice::DrawLine(
-				static_cast<int>(screenPos1.x),
-				static_cast<int>(screenPos1.y),
-				static_cast<int>(screenPos2.x),
-				static_cast<int>(screenPos2.y),
-				0xFFFFFFFF  // 白色
-			);
-		}
-	}
-}
-
-
+const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_03_02";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -125,35 +19,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Camera* camera = new Camera();
 	camera->Initialize();
-
-
-	// 各パーツのローカル変換
-	Vector3 translates[3] = {
-		{0.2f, 1.0f, 0.0f},		// Shoulder
-		{0.4f, 0.0f, 0.0f},		// Elbow
-		{0.3f, 0.0f, 0.0f}		// Hands
-	};
-
-	Vector3 rotates[3] = {
-		{0.0f, 0.0f, -6.8f},	// Shoulder
-		{0.0f, 0.0f, -1.4f},	// Elbow
-		{0.0f, 0.0f, 0.0f}		// Hands
-	};
-
-	Vector3 scales[3] = {
-		{1.0f, 1.0f, 1.0f},		// Shoulder
-		{1.0f, 1.0f, 1.0f},		// Elbow
-		{1.0f, 1.0f, 1.0f}		// Hands
-	};
-
-	//ワールド座標
-	Matrix4x4 worldMatrices[3];
-	//それぞれのパーツの色
-	uint32_t colors[3] = {
-		0xFF0000FF,  // Shoulder: 赤
-		0x00FF00FF,  // Elbow: 緑
-		0x0000FFFF   // Hands: 青
-	};
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -171,9 +36,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//カメラの更新
 		camera->Update(keys, preKeys);
-		//階層構造の更新
-		UpdateHierarchy(translates, rotates, scales, worldMatrices, 3);
 
+		Vector3 a{ 0.2f,1.0f,0.0f };
+		Vector3 b{ 2.4f,3.1f,1.2f };
+
+		Vector3 c = a + b;
+		Vector3 d = a - b;
+		Vector3 e = a * 2.4f;
+		Vector3 rotate{ 0.4f,1.43f,-0.8f };
+		Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate.x);
+		Matrix4x4 rotateYMatrix = MakeRotateYMatrix(rotate.y);
+		Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotate.z);
+		Matrix4x4 rotateMatrix = rotateXMatrix * rotateYMatrix * rotateZMatrix;
 
 		///
 		/// ↑更新処理ここまで
@@ -185,30 +59,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		ImGui::Begin("debug");
 
-		for (int i = 0; i < 3; i++) {
-			ImGui::PushID(i);  // ID衝突を避ける?
-			std::string label = "Control Point " + std::to_string(i);
-			ImGui::Text(label.c_str());
-			// 座標
-			ImGui::DragFloat3("Position", &translates[i].x, 0.01f);
-			//回転
-			ImGui::DragFloat3("Rotation", &rotates[i].x, 0.01f);
-			// スケール
-			ImGui::DragFloat3("Scale", &scales[i].x, 0.01f, 0.1f, 5.0f);
-
-		}
-
+		ImGui::Text("c:%f,%f,%f", c.x, c.y, c.z);
+		ImGui::Text("d:%f,%f,%f", d.x, d.y, d.z);
+		ImGui::Text("e:%f,%f,%f", e.x, e.y, e.z);
+		ImGui::Text("matrix:\n%f,%f,%f,%f\n%f,%f,%f,%f\n%f,%f,%f,%f\n%f,%f,%f,%f\n",
+			rotateMatrix.m[0][0], rotateMatrix.m[0][1], rotateMatrix.m[0][2], rotateMatrix.m[0][3],
+			rotateMatrix.m[1][0], rotateMatrix.m[1][1], rotateMatrix.m[1][2], rotateMatrix.m[1][3],
+			rotateMatrix.m[2][0], rotateMatrix.m[2][1], rotateMatrix.m[2][2], rotateMatrix.m[2][3],
+			rotateMatrix.m[3][0], rotateMatrix.m[3][1], rotateMatrix.m[3][2], rotateMatrix.m[3][3]
+		);
 		ImGui::End();
 
 		//グリッド線を描画
 		DrawGrid(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
 
-
-		//階層構造の描画
-		DrawHierarchy(worldMatrices, colors, 3,
-			camera->GetViewProjectionMatrix(),
-			camera->GetViewportMatrix()
-		);
 
 
 		///
