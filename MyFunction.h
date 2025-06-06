@@ -156,12 +156,68 @@ void FixAABBMinMax(AABB& aabb);
 /// <param name="segment"></param>
 /// <returns></returns>
 bool IsCollision(const AABB& aabb, const Segment& segment);
+
 /// <summary>
 /// 垂直なベクトルを求める
 /// </summary>
 /// <param name="vector"></param>
 /// <returns></returns>
 Vector3 Perpendicular(const Vector3& vector);
+
+
+/// <summary>
+/// 3次元空間上で２次ベジェ曲線上の点を求める関数
+/// </summary>
+/// <param name="p0">制御点</param>
+/// <param name="p1">制御点</param>
+/// <param name="p2">制御点</param>
+/// <param name="t">補間の割合</param>
+/// <returns></returns>
+Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t);
+
+
+
+
+/// <summary>
+/// ベジエ曲線を描画する関数
+/// </summary>
+/// <param name="controlPoint0">制御点0</param>
+/// <param name="controlPoint1">制御点1</param>
+/// <param name="controlPoint2">制御点2</param>
+/// <param name="subdivision">分割数</param>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
+/// <param name="color">色</param>
+void DrawBezier(
+	const Vector3& controlPoint0,
+	const Vector3& controlPoint1,
+	const Vector3& controlPoint2,
+	const int subdivision,
+	const Matrix4x4& viewProjectionMatrix,
+	const Matrix4x4& viewportMatrix,
+	uint32_t color);
+
+
+
+	/// <summary>
+	/// ベジエ曲線を描画する関数(制御点も描画する)
+	/// </summary>
+	/// <param name="controlPoint0">制御点0</param>
+	/// <param name="controlPoint1">制御点1</param>
+	/// <param name="controlPoint2">制御点2</param>
+	/// <param name="subdivision">分割数</param>
+	/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+	/// <param name="viewportMatrix">ビューポート</param>
+	/// <param name="color">色</param>
+	void DrawBezierAndPoints(
+		const Vector3& controlPoint0,
+		const Vector3& controlPoint1,
+		const Vector3& controlPoint2,
+		const int subdivision,
+		const Matrix4x4& viewProjectionMatrix,
+		const Matrix4x4& viewportMatrix,
+		uint32_t color);
+
 
 
 /*-----------------------------------------------------------------------*/
