@@ -178,48 +178,6 @@ Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t)
 
 
 
-/// <summary>
-/// ベジエ曲線を描画する関数
-/// </summary>
-/// <param name="controlPoint0">制御点0</param>
-/// <param name="controlPoint1">制御点1</param>
-/// <param name="controlPoint2">制御点2</param>
-/// <param name="subdivision">分割数</param>
-/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
-/// <param name="viewportMatrix">ビューポート</param>
-/// <param name="color">色</param>
-void DrawBezier(
-	const Vector3& controlPoint0,
-	const Vector3& controlPoint1,
-	const Vector3& controlPoint2,
-	const int subdivision,
-	const Matrix4x4& viewProjectionMatrix,
-	const Matrix4x4& viewportMatrix,
-	uint32_t color);
-
-
-
-	/// <summary>
-	/// ベジエ曲線を描画する関数(制御点も描画する)
-	/// </summary>
-	/// <param name="controlPoint0">制御点0</param>
-	/// <param name="controlPoint1">制御点1</param>
-	/// <param name="controlPoint2">制御点2</param>
-	/// <param name="subdivision">分割数</param>
-	/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
-	/// <param name="viewportMatrix">ビューポート</param>
-	/// <param name="color">色</param>
-	void DrawBezierAndPoints(
-		const Vector3& controlPoint0,
-		const Vector3& controlPoint1,
-		const Vector3& controlPoint2,
-		const int subdivision,
-		const Matrix4x4& viewProjectionMatrix,
-		const Matrix4x4& viewportMatrix,
-		uint32_t color);
-
-
-
 /*-----------------------------------------------------------------------*/
 //
 //								描画関数
@@ -285,5 +243,43 @@ void DrawTriangle(const Triangle& triangle, const Matrix4x4& viewProjectionMatri
 void DrawAABB(const AABB& aabb, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 
 
+/// <summary>
+/// ベジエ曲線を描画する関数
+/// </summary>
+/// <param name="controlPoint0">制御点0</param>
+/// <param name="controlPoint1">制御点1</param>
+/// <param name="controlPoint2">制御点2</param>
+/// <param name="subdivision">分割数</param>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
+/// <param name="color">色</param>
+void DrawBezier(
+	const Vector3& controlPoint0,
+	const Vector3& controlPoint1,
+	const Vector3& controlPoint2,
+	const int subdivision,
+	const Matrix4x4& viewProjectionMatrix,
+	const Matrix4x4& viewportMatrix,
+	uint32_t color);
 
+
+
+/// <summary>
+/// ベジエ曲線を描画する関数(制御点も描画する)
+/// </summary>
+/// <param name="controlPoint0">制御点0</param>
+/// <param name="controlPoint1">制御点1</param>
+/// <param name="controlPoint2">制御点2</param>
+/// <param name="subdivision">分割数</param>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
+/// <param name="color">色</param>
+void DrawBezierAndPoints(
+	const Vector3& controlPoint0,
+	const Vector3& controlPoint1,
+	const Vector3& controlPoint2,
+	const int subdivision,
+	const Matrix4x4& viewProjectionMatrix,
+	const Matrix4x4& viewportMatrix,
+	uint32_t color);
 
