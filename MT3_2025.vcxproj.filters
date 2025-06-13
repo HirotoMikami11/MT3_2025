@@ -26,6 +26,12 @@
     <ClCompile Include="MyFunction.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameTimer.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -111,5 +117,7 @@
     </ClInclude>
     <ClInclude Include="MyMath.h" />
     <ClInclude Include="MyFunction.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="FrameTimer.h" />
   </ItemGroup>
 </Project>

@@ -176,7 +176,14 @@ Vector3 Perpendicular(const Vector3& vector);
 Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t);
 
 
-
+/// <summary>
+/// ワールド座標からスクリーン座標を計算する関数
+/// </summary>
+/// <param name="v">ワールド座標</param>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
+/// <returns></returns>
+Vector3 MakeScreenPositionToWorld(const Vector3& v, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix);
 
 /*-----------------------------------------------------------------------*/
 //
@@ -187,16 +194,16 @@ Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t)
 /// <summary>
 /// グリッド線を描画する関数
 /// </summary>
-/// <param name="viewProjectionMatrix"></param>
-/// <param name="viewportMatrix"></param>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
 void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix);
 
 /// <summary>
 /// 球体を表示する関数
 /// </summary>
 /// <param name="sphere"></param>
-/// <param name="viewProjectionMatrix"></param>
-/// <param name="viewportMatrix"></param>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
 /// <param name="color"></param>
 void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 
@@ -204,8 +211,8 @@ void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, con
 /// 線分を描画する関数
 /// </summary>
 /// <param name="segment"></param>
-/// <param name="viewProjectionMatrix"></param>
-/// <param name="viewportMatrix"></param>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
 /// <param name="color"></param>
 void DrawLine(const Segment& segment, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 
@@ -214,8 +221,8 @@ void DrawLine(const Segment& segment, const Matrix4x4& viewProjectionMatrix, con
 /// 平面の描画
 /// </summary>
 /// <param name="plane"></param>
-/// <param name="viewProjectionMatrix"></param>
-/// <param name="viewportMatrix"></param>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
 /// <param name="color"></param>
 void DrawPlane(const Plane& plane, const Matrix4x4 viewProjectionMatrix, const Matrix4x4 viewportMatrix, uint32_t color);
 
@@ -227,8 +234,8 @@ void DrawPlane(const Plane& plane, const Matrix4x4 viewProjectionMatrix, const M
 /// 三角形を描画
 /// </summary>
 /// <param name="triangle"></param>
-/// <param name="viewProjectionMatrix"></param>
-/// <param name="viewportMatrix"></param>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
 /// <param name="color"></param>
 void DrawTriangle(const Triangle& triangle, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 
@@ -237,8 +244,8 @@ void DrawTriangle(const Triangle& triangle, const Matrix4x4& viewProjectionMatri
 /// AABBの描画
 /// </summary>
 /// <param name="aabb"></param>
-/// <param name="viewPeojectionMatrix"></param>
-/// <param name="viewportMatrix"></param>
+/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
+/// <param name="viewportMatrix">ビューポート</param>
 /// <param name="color"></param>
 void DrawAABB(const AABB& aabb, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 

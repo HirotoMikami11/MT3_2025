@@ -2,7 +2,7 @@
 
 /*-----------------------------------------------------------------------*/
 //
-//								描画関数
+//								計算関数
 //
 /*-----------------------------------------------------------------------*/
 
@@ -341,6 +341,14 @@ Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t)
 	Vector3 result = Lerp(p01, p12, t);
 
 	return result;
+}
+
+// ワールド座標をスクリーン座標に変換する関数
+Vector3 MakeScreenPositionToWorld(const Vector3& v, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix)
+{
+	Vector3 ndcPos = Transform(v, viewProjectionMatrix);
+	Vector3 screenPos = Transform(ndcPos, viewportMatrix);
+	return screenPos;
 }
 
 
