@@ -1,12 +1,10 @@
 ﻿#pragma once
-#define _USE_MATH_DEFINES
-#include<math.h>
 #include <cmath>
 #include<Novice.h>
 #include<assert.h>
 #include <format>//imGuiで配列をfor分で回すとき使う
 #include<algorithm>
-
+#include <numbers>
 
 
 
