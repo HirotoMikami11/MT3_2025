@@ -381,6 +381,25 @@ void UpdateSpring(Spring& spring, Ball& ball) {
 
 }
 
+/// <summary>
+/// 円運動を行う関数
+/// </summary>
+/// <param name="movePosition">動く座標</param>
+/// <param name="originPostion">円運動の中心になる座標</param>
+/// <param name="anglarVelocity">角速度(1秒間にどの程度角度が進むか)</param>
+/// <param name="radius">円運動をする半径</param>
+/// <param name="angle">現在の角度</param>
+void circularMotion(Vector3& movePosition, Vector3 originPostion, float& anglarVelocity, float& circleRadius, float& angle) {
+
+	angle += anglarVelocity * FrameTimer::GetInstance().GetDeltaTime();
+
+	//円運動の計算
+	movePosition.x = originPostion.x + std::cosf(angle) * circleRadius;
+	movePosition.y = originPostion.y + std::sinf(angle) * circleRadius;
+	movePosition.z = originPostion.z;
+
+}
+
 
 /*-----------------------------------------------------------------------*/
 //

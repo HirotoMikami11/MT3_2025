@@ -8,29 +8,28 @@
 
 const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_04_01";
 
-
-
 /// <summary>
-/// 円運動を行う関数
+/// 振り子
 /// </summary>
-/// <param name="movePosition">動く座標</param>
-/// <param name="originPostion">円運動の中心になる座標</param>
-/// <param name="anglarVelocity">角速度(1秒間にどの程度角度が進むか)</param>
-/// <param name="radius">円運動をする半径</param>
-/// <param name="angle">現在の角度</param>
-void circularMotion(Vector3& movePosition, Vector3 originPostion, float& anglarVelocity, float& circleRadius, float& angle) {
+struct Pendulum {
+	Vector3 anchor;				//アンカーポイント
+	float length;				//紐の長さ
+	float angle;				//現在の角度
+	float angularVelocity;		//角速度
+	float angularAcceleration;	//各加速度
+};
 
-	angle += anglarVelocity * FrameTimer::GetInstance().GetDeltaTime();
+void DrawPendulum(Pendulum& pendulum, Ball& ball, const Matrix4x4& viewProjectionMatrix,
+	const Matrix4x4& viewportMatrix, uint32_t color) {
 
-	//円運動の計算
-	movePosition.x = originPostion.x + std::cosf(angle) * circleRadius;
-	movePosition.y = originPostion.y + std::sinf(angle) * circleRadius;
-	movePosition.z = originPostion.z;
+	Vector3 springScreenPos = MakeScreenPositionToWorld(pendulum.anchor, viewProjectionMatrix, viewportMatrix);
+	Vector3 ballScreenPos = MakeScreenPositionToWorld(ball.position, viewProjectionMatrix, viewportMatrix);
+	Novice::DrawLine(static_cast<int>(springScreenPos.x), static_cast<int>(springScreenPos.y),
+		static_cast<int>(ballScreenPos.x), static_cast<int>(ballScreenPos.y),
+		color);
 
+	DrawSphere({ ball.position,ball.radius }, viewProjectionMatrix, viewportMatrix, ball.color);
 }
-
-
-
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -49,22 +48,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// FPS関連
 	FrameTimer& frameTimer = FrameTimer::GetInstance();
 
-	Sphere sphere;
-	sphere.center = { 0,0,0 };
-	sphere.radius = 0.1f;
+	///振り子
+	Pendulum pendulum;
+	pendulum.anchor = { 0.0f,1.0f,0.0f };
+	pendulum.length = 0.8f;
+	pendulum.angle = 0.7f;
+	pendulum.angularVelocity = 0.0f;
+	pendulum.angularAcceleration = 0.0f;
 
+	Ball ball{};
+	ball.position.x = pendulum.anchor.x + std::sin(pendulum.angle) * pendulum.length;
+	ball.position.y = pendulum.anchor.y - std::cos(pendulum.angle) * pendulum.length;
+	ball.position.z = pendulum.anchor.z;
+	ball.mass = 2.0f;
+	ball.radius = 0.05f;
+	ball.color = BLUE;
+
+	//移動させるフラグ
 	bool isMove = false;
-
-	//角速度
-	float anglarVelocity = std::numbers::pi_v<float>;
-	float angle = 0.0f;
-	//円運動するの半径(r)
-	float circleRadius = 0.8f;
-
-	//最初に円運動の初期位置に置いておく。
-	sphere.center.x = 0.0f + std::cosf(angle) * circleRadius;
-	sphere.center.y = 0.0f + std::sinf(angle) * circleRadius;
-	sphere.center.z = 0.0f;
 
 
 	// ウィンドウの×ボタンが押されるまでループ
@@ -82,12 +83,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+
+
+
+
 		//カメラの更新
 		camera->Update(keys, preKeys);
 
 		if (isMove) {
-			////円運動
-			circularMotion(sphere.center,{0.0f,0.0f,0.0f},anglarVelocity,circleRadius,angle);
+		//振り子の角度を計算する
+		pendulum.angularAcceleration = -(9.0f / pendulum.length) * std::sinf(pendulum.angle);
+		pendulum.angularVelocity += pendulum.angularAcceleration * frameTimer.GetDeltaTime();
+		pendulum.angle += pendulum.angularVelocity * frameTimer.GetDeltaTime();
+
+		//振り子の先端の位置にボールの座標を置く
+		ball.position.x = pendulum.anchor.x + std::sin(pendulum.angle) * pendulum.length;
+		ball.position.y = pendulum.anchor.y -std::cos(pendulum.angle) * pendulum.length;
+		ball.position.z = pendulum.anchor.z;
 		}
 
 
@@ -118,9 +130,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//グリッド線を描画
 		DrawGrid(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-
-		//球体を表示
-		DrawSphere(sphere, camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), WHITE);
+		DrawPendulum(pendulum, ball, camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(),WHITE);
 
 		///
 		/// ↑描画処理ここまで
