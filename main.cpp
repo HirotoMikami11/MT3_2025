@@ -6,27 +6,9 @@
 //FPS
 #include"FrameTimer.h"
 
-const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_04_01";
+const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_04_03";
 
-
-
-/// <summary>
-/// 円運動を行う関数
-/// </summary>
-/// <param name="movePosition">動く座標</param>
-/// <param name="originPostion">円運動の中心になる座標</param>
-/// <param name="anglarVelocity">角速度(1秒間にどの程度角度が進むか)</param>
-/// <param name="radius">円運動をする半径</param>
-/// <param name="angle">現在の角度</param>
-void circularMotion(Vector3& movePosition, Vector3 originPostion, float& anglarVelocity, float& circleRadius, float& angle) {
-
-	angle += anglarVelocity * FrameTimer::GetInstance().GetDeltaTime();
-
-	//円運動の計算
-	movePosition.x = originPostion.x + std::cosf(angle) * circleRadius;
-	movePosition.y = originPostion.y + std::sinf(angle) * circleRadius;
-	movePosition.z = originPostion.z;
-
+	DrawSphere({ ball.position,ball.radius }, viewProjectionMatrix, viewportMatrix, ball.color);
 }
 
 
@@ -47,19 +29,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	camera->Initialize();
 
 	// FPS関連
-	FrameTimer& frameTimer = FrameTimer::GetInstance();
+	pendulum.angularVelocity = 0.0f;
 
-	Sphere sphere;
-	sphere.center = { 0,0,0 };
-	sphere.radius = 0.1f;
 
-	bool isMove = false;
-
-	//角速度
-	float anglarVelocity = std::numbers::pi_v<float>;
-	float angle = 0.0f;
-	//円運動するの半径(r)
-	float circleRadius = 0.8f;
+	Ball ball{};
+	ball.position = { 0.0f,0.0f,0.0f };
+	ball.mass = 2.0f;
+	ball.radius = 0.05f;
+	ball.color = BLUE;
+	ball.radius = 0.05f;
+	ball.color = BLUE;
 
 	//最初に円運動の初期位置に置いておく。
 	sphere.center.x = 0.0f + std::cosf(angle) * circleRadius;
@@ -85,9 +64,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//カメラの更新
 		camera->Update(keys, preKeys);
 
-		if (isMove) {
-			////円運動
-			circularMotion(sphere.center,{0.0f,0.0f,0.0f},anglarVelocity,circleRadius,angle);
+		ball.position.y = pendulum.anchor.y -std::cos(pendulum.angle) * pendulum.length;
+		ball.position.z = pendulum.anchor.z;
 		}
 
 
@@ -116,11 +94,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		//グリッド線を描画
 		DrawGrid(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-
-		//球体を表示
-		DrawSphere(sphere, camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), WHITE);
+		DrawPendulum(pendulum, ball, camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(),WHITE);
 
 		///
 		/// ↑描画処理ここまで

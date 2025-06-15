@@ -382,6 +382,19 @@ void UpdateSpring(Spring& spring, Ball& ball) {
 }
 
 
+
+void UpdatePendulum(Pendulum& pendulum, Ball& ball) {
+	//振り子の角度を計算する
+	pendulum.angularAcceleration = -(9.0f / pendulum.length) * std::sinf(pendulum.angle);
+	pendulum.angularVelocity += pendulum.angularAcceleration * FrameTimer::GetInstance().GetDeltaTime();
+	pendulum.angle += pendulum.angularVelocity * FrameTimer::GetInstance().GetDeltaTime();
+
+	//振り子の先端の位置にボールの座標を置く
+	ball.position.x = pendulum.anchor.x + std::sin(pendulum.angle) * pendulum.length;
+	ball.position.y = pendulum.anchor.y - std::cos(pendulum.angle) * pendulum.length;
+	ball.position.z = pendulum.anchor.z;
+}
+
 /*-----------------------------------------------------------------------*/
 //
 //								描画関数
@@ -769,5 +782,17 @@ void DrawSpring(Spring& spring, Ball& ball, const Matrix4x4& viewProjectionMatri
 		WHITE);
 
 	DrawSphere({ ball.position,ball.radius }, viewProjectionMatrix, viewportMatrix, color);
+}
+
+void DrawPendulum(Pendulum& pendulum, Ball& ball, const Matrix4x4& viewProjectionMatrix,
+	const Matrix4x4& viewportMatrix, uint32_t color) {
+
+	Vector3 springScreenPos = MakeScreenPositionToWorld(pendulum.anchor, viewProjectionMatrix, viewportMatrix);
+	Vector3 ballScreenPos = MakeScreenPositionToWorld(ball.position, viewProjectionMatrix, viewportMatrix);
+	Novice::DrawLine(static_cast<int>(springScreenPos.x), static_cast<int>(springScreenPos.y),
+		static_cast<int>(ballScreenPos.x), static_cast<int>(ballScreenPos.y),
+		color);
+
+	DrawSphere({ ball.position,ball.radius }, viewProjectionMatrix, viewportMatrix, ball.color);
 }
 

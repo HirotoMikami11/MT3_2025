@@ -80,6 +80,16 @@ struct Ball {
 };
 
 
+/// <summary>
+/// 振り子
+/// </summary>
+struct Pendulum {
+	Vector3 anchor;				//アンカーポイント
+	float length;				//紐の長さ
+	float angle;				//現在の角度
+	float angularVelocity;		//角速度
+	float angularAcceleration;	//各加速度
+};
 /*-----------------------------------------------------------------------*/
 //
 //								計算関数
@@ -213,6 +223,8 @@ void UpdateSpring(Spring& spring, Ball& ball);
 
 
 
+void UpdatePendulum(Pendulum& pendulum, Ball& ball);
+
 /*-----------------------------------------------------------------------*/
 //
 //								描画関数
@@ -320,4 +332,8 @@ void DrawBezierAndPoints(
 
 
 void DrawSpring(Spring& spring, Ball& ball, const Matrix4x4& viewProjectionMatrix,
+	const Matrix4x4& viewportMatrix, uint32_t color);
+
+
+void DrawPendulum(Pendulum& pendulum, Ball& ball, const Matrix4x4& viewProjectionMatrix,
 	const Matrix4x4& viewportMatrix, uint32_t color);
