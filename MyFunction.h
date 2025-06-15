@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "MyMath.h"
+#include "FrameTimer.h"
 #include<algorithm>
+
 
 /// <summary>
 /// 球体
@@ -59,6 +61,24 @@ struct AABB {
 	Vector3 max;	//最大点
 
 };
+
+struct Spring {
+	//アンカー固定された橋の位置
+	Vector3 anchor;
+	float naturalLength;		//自然長
+	float stiffness;			//剛性,バネ定数k
+	float dampingCoefficient;	//減衰係数
+};
+
+struct Ball {
+	Vector3 position;			//ボールの位置
+	Vector3 velocity;			//ボールの速度
+	Vector3 acceleration;		//ボールの加速度
+	float mass;					//ボールの質量
+	float radius;				//ボールの半径
+	unsigned int color;			//ボールの色
+};
+
 
 /*-----------------------------------------------------------------------*/
 //
@@ -185,6 +205,14 @@ Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t)
 /// <returns></returns>
 Vector3 MakeScreenPositionToWorld(const Vector3& v, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix);
 
+
+
+
+void UpdateSpring(Spring& spring, Ball& ball);
+
+
+
+
 /*-----------------------------------------------------------------------*/
 //
 //								描画関数
@@ -290,3 +318,6 @@ void DrawBezierAndPoints(
 	const Matrix4x4& viewportMatrix,
 	uint32_t color);
 
+
+void DrawSpring(Spring& spring, Ball& ball, const Matrix4x4& viewProjectionMatrix,
+	const Matrix4x4& viewportMatrix, uint32_t color);

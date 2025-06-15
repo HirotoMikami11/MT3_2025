@@ -355,6 +355,35 @@ Vector3 MakeScreenPositionToWorld(const Vector3& v, const Matrix4x4& viewProject
 
 
 
+void UpdateSpring(Spring& spring, Ball& ball) {
+
+	Vector3 diff = ball.position - spring.anchor;
+	float length = Vector3Length(diff);
+
+	if (length != 0.0f) {
+
+		Vector3 direction = Vector3Normalize(diff);
+
+		Vector3 restPosition = spring.anchor + direction * spring.naturalLength;
+		Vector3 displacement = length * (ball.position - restPosition);
+		Vector3 restoringForce = -spring.stiffness * displacement;
+
+		///減衰抵抗を計算
+		Vector3 dampingForce = -spring.dampingCoefficient * ball.velocity;
+		//減衰抵抗も加味して、物体にかかる力を決定
+		Vector3 force = restoringForce + dampingForce;
+
+		ball.acceleration = force / ball.mass;
+	}
+	//加速度も速度も秒を基準とする(DeltaTimeを適応する)
+	ball.velocity += ball.acceleration * FrameTimer::GetInstance().GetDeltaTime();
+	ball.position += ball.velocity * FrameTimer::GetInstance().GetDeltaTime();
+
+}
+
+
+
+
 /*-----------------------------------------------------------------------*/
 //
 //								描画関数
@@ -730,3 +759,17 @@ void DrawBezierAndPoints(
 	DrawSphere({ controlPoint2, 0.01f }, viewProjectionMatrix, viewportMatrix, 0x0000FFFF); // 青色
 
 }
+
+
+void DrawSpring(Spring& spring, Ball& ball, const Matrix4x4& viewProjectionMatrix,
+	const Matrix4x4& viewportMatrix, uint32_t color) {
+
+	Vector3 springScreenPos = MakeScreenPositionToWorld(spring.anchor, viewProjectionMatrix, viewportMatrix);
+	Vector3 ballScreenPos = MakeScreenPositionToWorld(ball.position, viewProjectionMatrix, viewportMatrix);
+	Novice::DrawLine(static_cast<int>(springScreenPos.x), static_cast<int>(springScreenPos.y),
+		static_cast<int>(ballScreenPos.x), static_cast<int>(ballScreenPos.y),
+		WHITE);
+
+	DrawSphere({ ball.position,ball.radius }, viewProjectionMatrix, viewportMatrix, color);
+}
+

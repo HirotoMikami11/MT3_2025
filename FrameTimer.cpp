@@ -54,13 +54,6 @@ void FrameTimer::ImGui()
 
 	//ImGui::Text("Delta Time: %.6f s", deltaTime_);
 	//ImGui::Text("Total Time: %.2f s", totalTime_);
-
-	// FPS更新間隔の設定
-	static float interval = fpsUpdateInterval_;
-	ImGui::Text("FPS Update Interval");
-	if (ImGui::SliderFloat("", &interval, 0.1f, 10.0f, "%.1f s")) {
-		SetFPSUpdateInterval(interval);
-	}
 }
 
 
