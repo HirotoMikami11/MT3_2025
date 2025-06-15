@@ -8,10 +8,6 @@
 
 const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_04_03";
 
-	DrawSphere({ ball.position,ball.radius }, viewProjectionMatrix, viewportMatrix, ball.color);
-}
-
-
 
 
 // Windowsアプリでのエントリーポイント(main関数)
@@ -29,7 +25,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	camera->Initialize();
 
 	// FPS関連
-	pendulum.angularVelocity = 0.0f;
+	FrameTimer& frameTimer = FrameTimer::GetInstance();
 
 
 	Ball ball{};
@@ -40,10 +36,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ball.radius = 0.05f;
 	ball.color = BLUE;
 
-	//最初に円運動の初期位置に置いておく。
-	sphere.center.x = 0.0f + std::cosf(angle) * circleRadius;
-	sphere.center.y = 0.0f + std::sinf(angle) * circleRadius;
-	sphere.center.z = 0.0f;
+
 
 
 	// ウィンドウの×ボタンが押されるまでループ
@@ -57,6 +50,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		frameTimer.BeginFrame();
 
+		bool isMove = false;
 		///
 		/// ↓更新処理ここから
 		///
@@ -64,9 +58,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//カメラの更新
 		camera->Update(keys, preKeys);
 
-		ball.position.y = pendulum.anchor.y -std::cos(pendulum.angle) * pendulum.length;
-		ball.position.z = pendulum.anchor.z;
-		}
+
 
 
 
@@ -95,7 +87,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		DrawGrid(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-		DrawPendulum(pendulum, ball, camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(),WHITE);
+
 
 		///
 		/// ↑描画処理ここまで
