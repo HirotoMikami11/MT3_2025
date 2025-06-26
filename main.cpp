@@ -6,7 +6,7 @@
 //FPS
 #include"FrameTimer.h"
 
-const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_04_03";
+const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_04_04";
 
 
 
@@ -30,25 +30,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	camera->Initialize();
 
 
-
-
-	ConicalPendulum conicalPendulum;
-
-	conicalPendulum.anchor = { 0.0f, 1.0f, 0.0f };	//アンカーポイント
-	conicalPendulum.length = 0.8f;					//紐の長さ
-	conicalPendulum.halfApexAngle = 0.7f;			//頂角の半分
-	conicalPendulum.angle = 0.0f;					//角度
-	conicalPendulum.angularVelocity = 0.0f;			//角速度
-
-	Ball ball{};
-	ball.position = { 0.0f,0.0f,0.0f };
-	ball.mass = 2.0f;
-	ball.radius = 0.05f;
-	ball.color = BLUE;
-	ball.radius = 0.05f;
-	ball.color = BLUE;
-	//最初の位置にするため一同更新
-	UpdatePendulum(conicalPendulum, ball);
 	//動くかどうかのフラグ
 	bool isMove = false;
 
@@ -73,7 +54,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		if (isMove) {
-			UpdatePendulum(conicalPendulum, ball);
+
 		};
 
 		///*	ImGUI	 *///
@@ -98,8 +79,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		DrawGrid(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
-
-		DrawPendulum(conicalPendulum, ball, camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), WHITE);
 
 		///
 		/// ↑描画処理ここまで
