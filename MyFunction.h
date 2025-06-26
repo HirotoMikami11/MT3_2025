@@ -90,6 +90,25 @@ struct Pendulum {
 	float angularVelocity;		//角速度
 	float angularAcceleration;	//各加速度
 };
+
+
+/// <summary>
+/// 円錐振り子
+/// </summary>
+struct ConicalPendulum {
+	Vector3 anchor;			//アンカーポイント	
+	float length;			//紐の長さ
+	float halfApexAngle;	//頂角の半分
+	float angle;			//現在の角度
+	float angularVelocity;	//角速度
+};
+
+
+
+
+
+
+
 /*-----------------------------------------------------------------------*/
 //
 //								計算関数
@@ -217,13 +236,29 @@ Vector3 MakeScreenPositionToWorld(const Vector3& v, const Matrix4x4& viewProject
 
 
 
-
+/// <summary>
+/// 
+/// </summary>
+/// <param name="spring"></param>
+/// <param name="ball"></param>
 void UpdateSpring(Spring& spring, Ball& ball);
 
 
 
-
+/// <summary>
+/// 
+/// </summary>
+/// <param name="pendulum"></param>
+/// <param name="ball"></param>
 void UpdatePendulum(Pendulum& pendulum, Ball& ball);
+
+
+/// <summary>
+/// 円錐振り子の更新
+/// </summary>
+/// <param name="pendulum"></param>
+/// <param name="ball"></param>
+void UpdatePendulum(ConicalPendulum& pendulum, Ball& ball);
 
 /*-----------------------------------------------------------------------*/
 //
@@ -336,4 +371,16 @@ void DrawSpring(Spring& spring, Ball& ball, const Matrix4x4& viewProjectionMatri
 
 
 void DrawPendulum(Pendulum& pendulum, Ball& ball, const Matrix4x4& viewProjectionMatrix,
+	const Matrix4x4& viewportMatrix, uint32_t color);
+
+
+/// <summary>
+/// 円錐振り子の描画関数
+/// </summary>
+/// <param name="pendulum"></param>
+/// <param name="ball"></param>
+/// <param name="viewProjectionMatrix"></param>
+/// <param name="viewportMatrix"></param>
+/// <param name="color"></param>
+void DrawPendulum(ConicalPendulum& pendulum, Ball& ball, const Matrix4x4& viewProjectionMatrix,
 	const Matrix4x4& viewportMatrix, uint32_t color);

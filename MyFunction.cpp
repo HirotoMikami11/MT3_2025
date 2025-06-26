@@ -395,6 +395,20 @@ void UpdatePendulum(Pendulum& pendulum, Ball& ball) {
 	ball.position.z = pendulum.anchor.z;
 }
 
+void UpdatePendulum(ConicalPendulum& pendulum, Ball& ball) {
+	//振り子の角度を計算する
+	pendulum.angularVelocity = std::sqrt(9.8f / (pendulum.length * std::cos(pendulum.halfApexAngle)));
+	pendulum.angle += pendulum.angularVelocity * FrameTimer::GetInstance().GetDeltaTime();
+
+
+	float radius = std::sin(pendulum.halfApexAngle) * pendulum.length;	//円の半径
+	float height = std::cos(pendulum.halfApexAngle) * pendulum.length;	//高さ
+
+	ball.position.x = pendulum.anchor.x + std::cos(pendulum.angle) * radius;
+	ball.position.y = pendulum.anchor.y - height;	//-をつけるのはY軸が上方向だから
+	ball.position.z = pendulum.anchor.z + std::sin(pendulum.angle) * radius;
+}
+
 /*-----------------------------------------------------------------------*/
 //
 //								描画関数
@@ -795,4 +809,17 @@ void DrawPendulum(Pendulum& pendulum, Ball& ball, const Matrix4x4& viewProjectio
 
 	DrawSphere({ ball.position,ball.radius }, viewProjectionMatrix, viewportMatrix, ball.color);
 }
+
+void DrawPendulum(ConicalPendulum& pendulum, Ball& ball, const Matrix4x4& viewProjectionMatrix,
+	const Matrix4x4& viewportMatrix, uint32_t color) {
+
+	Vector3 pendulumScreenPos = MakeScreenPositionToWorld(pendulum.anchor, viewProjectionMatrix, viewportMatrix);
+	Vector3 ballScreenPos = MakeScreenPositionToWorld(ball.position, viewProjectionMatrix, viewportMatrix);
+	Novice::DrawLine(static_cast<int>(pendulumScreenPos.x), static_cast<int>(pendulumScreenPos.y),
+		static_cast<int>(ballScreenPos.x), static_cast<int>(ballScreenPos.y),
+		color);
+
+	DrawSphere({ ball.position,ball.radius }, viewProjectionMatrix, viewportMatrix, ball.color);
+}
+
 
