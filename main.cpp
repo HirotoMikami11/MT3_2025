@@ -8,8 +8,10 @@
 
 const char kWindowTitle[] = "LE2A_15_ミカミ_ヒロト_MT3_04_04";
 
-
-
+Vector3 Reflect(const Vector3& Input, const Vector3& normal) {
+	// 法線ベクトルに対する反射ベクトルを計算
+	return Input - 2.0f * Vector3Dot(Input, normal) * normal;
+}
 
 
 
@@ -29,6 +31,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Camera* camera = new Camera();
 	camera->Initialize();
 
+
+	Plane plane;
+	plane.normal = Vector3Normalize({ -0.2f,0.9f,-0.3f });
+	plane.distance = 0.0f;
+
+	Ball ball{};
+	ball.position = { 0.8f,1.2f,0.3f };
+	ball.mass = 2.0f;
+	ball.radius = 0.05f;
+	ball.acceleration = { 0.0f, -9.8f, 0.0f }; // 重力加速度を設定
+	ball.color = BLUE;
+
+	float e = 0.5f; // 反発係数
 
 	//動くかどうかのフラグ
 	bool isMove = false;
@@ -55,6 +70,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (isMove) {
 
+
+			ball.velocity += ball.acceleration * frameTimer.GetDeltaTime(); // 加速度を速度に加える
+			ball.position += ball.velocity * frameTimer.GetDeltaTime(); // 速度を位置に加える
+
+			if (IsCollision(Sphere{ ball.position,ball.radius }, plane)) {
+				Vector3 reflected = Reflect(ball.velocity, plane.normal); // 反射ベクトルを計算
+				Vector3 projectToNormal = Project(reflected, plane.normal); // 法線方向への射影
+				Vector3 moovingDirection = reflected - projectToNormal; // 法線方向を除いた移動方向
+				ball.velocity = projectToNormal * e + moovingDirection; // 反射ベクトルに法線方向を加える
+			}
+
+
 		};
 
 		///*	ImGUI	 *///
@@ -68,6 +95,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		ImGui::Text("isMove : %s", isMove ? "true" : "false");
 
+		//リセットする
+		if (ImGui::Button("isReset")) {
+
+			ball.position = { 0.8f,1.2f,0.3f };
+			ball.mass = 2.0f;
+			ball.radius = 0.05f;
+			ball.acceleration = { 0.0f, -9.8f, 0.0f }; // 重力加速度を設定
+			ball.velocity = { 0.0f, 0.0f, 0.0f }; // 重力加速度を設定
+			ball.color = BLUE;
+		}
+
+
+
+		ImGui::SliderFloat3("Plane Center", &plane.normal.x, -1.0f, 1.0f);
+		ImGui::SliderFloat("Plane Radius", &plane.distance, 0.0f, 1.0f);
+
 		ImGui::End();
 
 		///
@@ -79,6 +122,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		DrawGrid(camera->GetViewProjectionMatrix(), camera->GetViewportMatrix());
+		DrawSphere({ ball.position,ball.radius }, camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), WHITE);
+		DrawPlane(plane, camera->GetViewProjectionMatrix(), camera->GetViewportMatrix(), WHITE);
 
 		///
 		/// ↑描画処理ここまで
